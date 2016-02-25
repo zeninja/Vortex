@@ -6,15 +6,25 @@ using System.Collections;
 /// </summary>
 public class GraphicsManager : MonoBehaviour {
 
+	[System.NonSerialized]
+	public Vector3[] corners;
+	
+	Mesh myMesh;
+
 	// Use this for initialization
 	void Start () {
-	
+		myMesh = new Mesh();
+		
 	}
 	
 	// Update is called once per frame
 	void Update () {
 	
 	}
+	
+//	void Trigger() {
+//		
+//	}
 	
 	void Trigger() {
 		GetComponent<SpriteRenderer>().enabled = true;

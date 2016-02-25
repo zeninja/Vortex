@@ -6,7 +6,7 @@ public class PlayerManager : MonoBehaviour {
 
 	public GameObject[] characters;
 	PolygonCollider2D polygonCollider;
-//	LineRenderer lineRenderer;
+	LineRenderer lineRenderer;
 	
 	float[] currentSlopes;
 	float[] prevSlopes;
@@ -29,7 +29,7 @@ public class PlayerManager : MonoBehaviour {
 		
 		
 		polygonCollider = GetComponent<PolygonCollider2D>();
-//		lineRenderer = GetComponent<LineRenderer>();
+		lineRenderer = GetComponent<LineRenderer>();
 	}
 	
 	// Update is called once per frame
@@ -40,10 +40,10 @@ public class PlayerManager : MonoBehaviour {
 	}
 	
 	void UpdateLineDisplay() {
-//		lineRenderer.SetPosition(0, characters[0].transform.position);
-//		lineRenderer.SetPosition(1, characters[1].transform.position);
-//		lineRenderer.SetPosition(2, characters[2].transform.position);
-////		lineRenderer.SetPosition(3, characters[0].transform.position);
+		lineRenderer.SetPosition(0, characters[0].transform.position);
+		lineRenderer.SetPosition(1, characters[1].transform.position);
+		lineRenderer.SetPosition(2, characters[2].transform.position);
+		lineRenderer.SetPosition(3, characters[0].transform.position);
 	}
 	
 	void UpdateCollider() {
@@ -102,23 +102,20 @@ public class PlayerManager : MonoBehaviour {
 //		}
 	}
 	
-	void OnTap(TapGesture gesture) {		
-		if (gesture.State == GestureRecognitionState.Started) {
-			Vector2 startPosition = Camera.main.ScreenToWorldPoint(gesture.StartPosition);
-			int colliderLayer = 1 << LayerMask.NameToLayer("Player");
-			
-			RaycastHit2D hit = Physics2D.Raycast(startPosition, Vector2.zero, 0, colliderLayer);
-			
-			if (hit.collider != null) {
-				if(hit.collider == polygonCollider) {
-					Trigger();
-				}
+	void OnTap (TapGesture gesture) {			
+		Vector2 startPosition = Camera.main.ScreenToWorldPoint(gesture.StartPosition);
+//		int colliderLayer = 1 << LayerMask.NameToLayer("Player");
+		
+		RaycastHit2D hit = Physics2D.Raycast(startPosition, Vector2.zero);
+		
+		if (hit.collider != null) {
+			if(hit.collider == polygonCollider) {
+				Trigger();
 			}
 		}
 	}
 	
 	void Trigger() {
-		Debug.Log("TRIGGERED");
 		for (int i = 0; i < collidingObjects.Count; i++) {
 			collidingObjects[i].SendMessage("Trigger");
 		}
