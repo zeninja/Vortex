@@ -4,11 +4,13 @@ using System.Collections;
 public class Character : MonoBehaviour {
 
 	bool canMove = false;
-	Collider2D collider;
+	Collider2D myCollider;
+	
+	[System.NonSerialized] public bool moving;
 
 	// Use this for initialization
 	void Start () {
-		collider = transform.GetComponentInChildren<Collider2D>();
+		myCollider = transform.GetComponentInChildren<Collider2D>();
 	}
 	
 	// Update is called once per frame
@@ -30,7 +32,7 @@ public class Character : MonoBehaviour {
 			RaycastHit2D hit = Physics2D.Raycast(startPosition, Vector2.zero, 0, characterLayer);
 			
 			if (hit.collider != null) {
-				if(hit.collider == collider) {
+				if(hit.collider == myCollider) {
 					canMove = true;
 					positionOffset = startPosition - (Vector2)transform.position;
 				}
@@ -40,10 +42,12 @@ public class Character : MonoBehaviour {
 		if(gesture.Phase == ContinuousGesturePhase.Updated && canMove) {
 //			transform.position = (Vector2)transform.position + gesture.DeltaMove;
 			transform.position = (Vector2)Camera.main.ScreenToWorldPoint(gesture.Position) + positionOffset;
+			moving = true;
 		}
 		
 		if(gesture.Phase == ContinuousGesturePhase.Ended) {
 			canMove = false;
+			moving = false;
 		}
 	}
 }
