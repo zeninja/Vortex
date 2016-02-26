@@ -60,6 +60,10 @@ public class EnemyRoamer : MonoBehaviour {
 
 	}
 
+	void Trigger() {
+		Debug.Log ("trigger");
+	}
+
 	bool CheckForPlayer(){
 		return false; // temp
 		
