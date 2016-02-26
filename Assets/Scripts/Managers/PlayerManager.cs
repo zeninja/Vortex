@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 public class PlayerManager : MonoBehaviour {
 
-	public enum Character { Red, Blue, Yellow };
-	public Character currentCharacter = Character.Red;
+	public enum CharacterType { Red, Blue, Yellow };
+	public CharacterType currentCharacter = CharacterType.Red;
 
 	public GameObject[] characters;
 	PolygonCollider2D polygonCollider;
@@ -25,13 +25,17 @@ public class PlayerManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		polygonCollider = GetComponent<PolygonCollider2D>();
+		
+		for (int i = 0; i < 3; i++) {
+			characters[i].GetComponent<Character>().playerManager = this;
+		}
+		
 		currentSlopes  = new float[3];
 		prevSlopes 	   = new float[3];
 		
 		comparedSlopes = new float[3];
 		
-		
-		polygonCollider = GetComponent<PolygonCollider2D>();
 		lineRenderer = GetComponent<LineRenderer>();
 	}
 	
@@ -40,7 +44,10 @@ public class PlayerManager : MonoBehaviour {
 		UpdateCollider();
 		UpdateLineDisplay();
 		CalculateSlopesBetweenCharacters();
-
+	}
+	
+	public void SetCharacterType(CharacterType latestCharacter) {
+		currentCharacter = latestCharacter;
 	}
 	
 	void UpdateLineDisplay() {

@@ -22,7 +22,7 @@ public class EnemyRoamer : MonoBehaviour {
 
 	void CheckStatus(){
 		// Check what action to do next
-		if (
+//		if (
 	}
 
 	void Wander(){

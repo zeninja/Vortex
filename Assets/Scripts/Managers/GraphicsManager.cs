@@ -1,9 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-/// <summary>
-/// TEMPORARRRYYYYYYYYYYYYYYYYYYYYYYYYYY
-/// </summary>
 public class GraphicsManager : MonoBehaviour {
 
 	PlayerManager playerManager;
@@ -12,11 +9,17 @@ public class GraphicsManager : MonoBehaviour {
 	public Vector3[] corners = new Vector3[3];
 	
 	Mesh mesh;
+	Material material;
+	
+	public Color redColor;
+	public Color blueColor;
+	public Color yellowColor;
 
 	// Use this for initialization
 	void Start () {
 		playerManager = transform.root.GetComponent<PlayerManager>();
 		mesh = new Mesh();
+		material = GetComponent<MeshRenderer>().material;
 		GetComponent<MeshFilter>().mesh = mesh;
 		SetupMesh();
 	}
@@ -24,11 +27,8 @@ public class GraphicsManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		UpdateMesh();
+		UpdateGraphics();
 	}
-	
-//	void Trigger() {
-//		
-//	}
 
 	void SetupMesh() {
 		for (int i = 0; i < 3; i++) {
@@ -85,12 +85,26 @@ public class GraphicsManager : MonoBehaviour {
 		mesh.vertices = vertices;
 	}
 	
+	void UpdateGraphics() {
+		switch(playerManager.currentCharacter) {
+			case PlayerManager.CharacterType.Red:
+				material.color = redColor;
+				break;
+			case PlayerManager.CharacterType.Blue:
+				material.color = blueColor;
+				break;
+			case PlayerManager.CharacterType.Yellow:
+				material.color = yellowColor;
+				break;
+		}
+	}
+	
 	void Trigger() {
-		GetComponent<SpriteRenderer>().enabled = true;
-		iTween.ValueTo(gameObject, iTween.Hash("from", 1, "to", 0, "time", .5f, "onupdate", "UpdateAlpha"));
+//		GetComponent<SpriteRenderer>().enabled = true;
+//		iTween.ValueTo(gameObject, iTween.Hash("from", 1, "to", 0, "time", .5f, "onupdate", "UpdateAlpha"));
 	}
 	
 	void UpdateAlpha(float newAlpha) {
-		GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, newAlpha);
+//		GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, newAlpha);
 	}
 }

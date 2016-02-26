@@ -3,13 +3,14 @@ using System.Collections;
 
 public class Character : MonoBehaviour {
 
-	public PlayerManager.Character myCharacter = PlayerManager.Character.Red;
+	public PlayerManager.CharacterType myCharacter = PlayerManager.CharacterType.Red;
+	
+	[System.NonSerialized] public PlayerManager playerManager;
+	[System.NonSerialized] public bool moving;
 
 	bool canMove = false;
 	Collider2D myCollider;
 	
-	[System.NonSerialized] public bool moving;
-
 	// Use this for initialization
 	void Start () {
 		myCollider = transform.GetComponentInChildren<Collider2D>();
@@ -17,11 +18,7 @@ public class Character : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		HandleInput();
-	}
-	
-	void HandleInput() {
-		transform.Translate(new Vector3(Input.GetAxisRaw("Horizontal"), 0, 0));
+		
 	}
 	
 	void OnDrag(DragGesture gesture) {
@@ -35,6 +32,8 @@ public class Character : MonoBehaviour {
 			
 			if (hit.collider != null) {
 				if(hit.collider == myCollider) {
+					playerManager.SetCharacterType(myCharacter);
+					
 					canMove = true;
 					positionOffset = startPosition - (Vector2)transform.position;
 				}
