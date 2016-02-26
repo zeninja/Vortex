@@ -9,7 +9,7 @@ public class PlayerManager : MonoBehaviour {
 
 	public GameObject[] characters;
 	PolygonCollider2D polygonCollider;
-	LineRenderer lineRenderer;
+	LineRenderer[] lineRenderers = new LineRenderer[3];
 	
 	float[] currentSlopes;
 	float[] prevSlopes;
@@ -29,6 +29,7 @@ public class PlayerManager : MonoBehaviour {
 		
 		for (int i = 0; i < 3; i++) {
 			characters[i].GetComponent<Character>().playerManager = this;
+			lineRenderers[i] = characters[i].GetComponent<LineRenderer>();
 		}
 		
 		currentSlopes  = new float[3];
@@ -36,7 +37,7 @@ public class PlayerManager : MonoBehaviour {
 		
 		comparedSlopes = new float[3];
 		
-		lineRenderer = GetComponent<LineRenderer>();
+
 	}
 	
 	// Update is called once per frame
@@ -48,13 +49,19 @@ public class PlayerManager : MonoBehaviour {
 	
 	public void SetCharacterType(CharacterType latestCharacter) {
 		currentCharacter = latestCharacter;
+		
+		graphics.GetComponent<GraphicsManager>().UpdateGraphics();
 	}
 	
 	void UpdateLineDisplay() {
-		lineRenderer.SetPosition(0, characters[0].transform.position);
-		lineRenderer.SetPosition(1, characters[1].transform.position);
-		lineRenderer.SetPosition(2, characters[2].transform.position);
-		lineRenderer.SetPosition(3, characters[0].transform.position);
+		lineRenderers[0].SetPosition(0, characters[0].transform.position);
+		lineRenderers[0].SetPosition(1, characters[1].transform.position);
+		
+		lineRenderers[1].SetPosition(0, characters[1].transform.position);
+		lineRenderers[1].SetPosition(1, characters[2].transform.position);
+		
+		lineRenderers[2].SetPosition(0, characters[2].transform.position);
+		lineRenderers[2].SetPosition(1, characters[0].transform.position);
 	}
 	
 	void UpdateCollider() {

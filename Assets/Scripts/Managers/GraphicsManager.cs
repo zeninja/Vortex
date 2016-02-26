@@ -14,6 +14,9 @@ public class GraphicsManager : MonoBehaviour {
 	public Color redColor;
 	public Color blueColor;
 	public Color yellowColor;
+	
+	[System.NonSerialized]
+	public Color currentColor;
 
 	// Use this for initialization
 	void Start () {
@@ -27,7 +30,7 @@ public class GraphicsManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		UpdateMesh();
-		UpdateGraphics();
+		//UpdateGraphics();
 	}
 
 	void SetupMesh() {
@@ -85,26 +88,26 @@ public class GraphicsManager : MonoBehaviour {
 		mesh.vertices = vertices;
 	}
 	
-	void UpdateGraphics() {
+	public void UpdateGraphics() {
 		switch(playerManager.currentCharacter) {
 			case PlayerManager.CharacterType.Red:
-				material.color = redColor;
+				currentColor = redColor;
 				break;
 			case PlayerManager.CharacterType.Blue:
-				material.color = blueColor;
+				currentColor = blueColor;
 				break;
 			case PlayerManager.CharacterType.Yellow:
-				material.color = yellowColor;
+				currentColor = yellowColor;
 				break;
 		}
 	}
 	
 	void Trigger() {
 //		GetComponent<SpriteRenderer>().enabled = true;
-//		iTween.ValueTo(gameObject, iTween.Hash("from", 1, "to", 0, "time", .5f, "onupdate", "UpdateAlpha"));
+		iTween.ValueTo(gameObject, iTween.Hash("from", 1, "to", 0, "time", .5f, "onupdate", "UpdateAlpha"));
 	}
 	
 	void UpdateAlpha(float newAlpha) {
-//		GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, newAlpha);
+		material.color = new Color(currentColor.r, currentColor.g, currentColor.b, newAlpha);
 	}
 }
