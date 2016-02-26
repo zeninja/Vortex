@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 public class PlayerManager : MonoBehaviour {
 
+	public enum Character { Red, Blue, Yellow };
+	public Character currentCharacter = Character.Red;
+
 	public GameObject[] characters;
 	PolygonCollider2D polygonCollider;
 	LineRenderer lineRenderer;
@@ -37,6 +40,7 @@ public class PlayerManager : MonoBehaviour {
 		UpdateCollider();
 		UpdateLineDisplay();
 		CalculateSlopesBetweenCharacters();
+
 	}
 	
 	void UpdateLineDisplay() {

@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Character : MonoBehaviour {
 
+	public PlayerManager.Character myCharacter = PlayerManager.Character.Red;
+
 	bool canMove = false;
 	Collider2D myCollider;
 	
@@ -40,7 +42,6 @@ public class Character : MonoBehaviour {
 		}
 		
 		if(gesture.Phase == ContinuousGesturePhase.Updated && canMove) {
-//			transform.position = (Vector2)transform.position + gesture.DeltaMove;
 			transform.position = (Vector2)Camera.main.ScreenToWorldPoint(gesture.Position) + positionOffset;
 			moving = true;
 		}
