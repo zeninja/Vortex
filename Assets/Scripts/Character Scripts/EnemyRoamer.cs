@@ -4,6 +4,8 @@ using System.Collections;
 public class EnemyRoamer : MonoBehaviour {
 	// This Enemy roams around, pursues player in a radius, and has a melee weapon.
 
+	public PlayerManager.CharacterType enemyType = PlayerManager.CharacterType.Red;
+	PlayerManager playerManager;
 	bool changeStatus = false; 
 //	string state = "none";
 	enum state { none, Pursue, Wander };
@@ -13,8 +15,9 @@ public class EnemyRoamer : MonoBehaviour {
 	public float speed = 0.5f;
 
 	void Start () {
-		 xValue = Random.Range(-1f,1f);
-		 yValue = Random.Range(-1f,1f);
+		xValue = Random.Range(-1f,1f);
+		yValue = Random.Range(-1f,1f);
+		playerManager = GameObject.Find("Player").GetComponent<PlayerManager>();
 
 	}
 
@@ -52,7 +55,7 @@ public class EnemyRoamer : MonoBehaviour {
 	}
 
 	void Wander(){
-		Debug.Log ("wandeR" + xValue);
+//		Debug.Log ("wandeR" + xValue);
 //		this.transform.position = new Vector3 (transform.position.x+ Random.Range(-1f,1f), transform.position.y+ Random.Range(-1f,1f), transform.position.z); 
 		this.transform.position = new Vector3 (transform.position.x + xValue *speed, transform.position.y+ yValue *speed, transform.position.z); 
 
@@ -61,12 +64,20 @@ public class EnemyRoamer : MonoBehaviour {
 	}
 
 	void Trigger() {
-		Debug.Log ("trigger");
+		if (playerManager.currentCharacter == enemyType) {
+			Explode (); 
+		}
 	}
 
 	bool CheckForPlayer(){
 		return false; // temp
 		
+	}
+
+	void Explode(){
+		//Remove from collidingObjects in PlayerManager
+		playerManager.RemoveDestroyedEnemy(gameObject.GetComponent<Collider2D>());
+		Destroy (gameObject);
 	}
 
 	void PursuePlayer(){

@@ -153,7 +153,16 @@ public class PlayerManager : MonoBehaviour {
 			}
 		}
 	}
-	
+
+	public void RemoveDestroyedEnemy(Collider2D other) {
+		for (int i = 0; i < collidingObjects.Count; i++) {
+			if (collidingObjects[i].GetComponentInChildren<Collider2D>() == other) {
+				collidingObjects.Remove(collidingObjects[i]);
+			}
+		}
+	}
+
+
 	void OnDrawGizmos() {
 		Gizmos.DrawLine(characters[0].transform.position, characters[1].transform.position);
 		Gizmos.DrawLine(characters[1].transform.position, characters[2].transform.position);
