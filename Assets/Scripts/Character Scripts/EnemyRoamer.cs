@@ -93,12 +93,12 @@ public class EnemyRoamer : MonoBehaviour {
 
 	void Trigger() {
 		if (playerManager.currentCharacter == enemyType) {
-			Explode (); 
+			//Explode (); 
 		}
 	}
 
 
-	void Explode(){
+	public void Explode(){
 		//Remove from collidingObjects in PlayerManager
 	//	playerManager.RemoveDestroyedEnemy(gameObject.GetComponent<Collider2D>());
 		Destroy (gameObject);

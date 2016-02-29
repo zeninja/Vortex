@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour {
 	public GameObject enemy;
 	// Use this for initialization
 	void Start () {
-		InvokeRepeating("EnemySpawner",0,3);
+		InvokeRepeating("EnemySpawner",0,4);
 	}
 	
 	// Update is called once per frame
@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour {
 
 	void EnemySpawner(){
 		int randomColor = Random.Range (0, 3);
-		Debug.Log (randomColor);
+//		Debug.Log (randomColor);
 		if (randomColor == 0) {
 			enemy.GetComponent<EnemyRoamer> ().enemyType = PlayerManager.CharacterType.Red;
 			enemy. GetComponentInChildren<SpriteRenderer> ().color = Color.red;
