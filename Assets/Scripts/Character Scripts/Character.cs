@@ -26,7 +26,7 @@ public class Character : MonoBehaviour {
 	
 	void OnFingerDown(FingerDownEvent fingerDown) {
 		
-		Debug.Log(fingerDown.Selection);
+//		Debug.Log(fingerDown.Selection);
 		
 		// THIS IS PROBABLY A LITTLE BIT TOO INACCURATE FOR WHAT WE ACTUALLY NEED
 	
