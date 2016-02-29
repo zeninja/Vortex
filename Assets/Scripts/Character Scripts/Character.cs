@@ -50,4 +50,9 @@ public class Character : MonoBehaviour {
 			moving = false;
 		}
 	}
+
+	void Destroy(){
+		Debug.Log ("GAMEOVER");
+		//Destroy (gameObject);
+	}
 }

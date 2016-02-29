@@ -107,7 +107,16 @@ public class EnemyRoamer : MonoBehaviour {
 	void PursuePlayer(){
 		myTransform.position += myTransform.right * moveSpeed * Time.deltaTime;
 
+	}
 
+	void OnTriggerEnter2D(Collider2D other){
+		if (other.CompareTag("Character")){
+			// Destroys characters on collision
+			//Debug.Log("name: " +other.transform.gameObject.name);
+			other.transform.gameObject.GetComponentInParent<Character>().SendMessage ("Destroy");
+		
+		}
+	
 	}
 
 
