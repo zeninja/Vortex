@@ -50,7 +50,6 @@ public class EnemyRoamer : MonoBehaviour {
 				myTransform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
 				PursuePlayer ();
-
 				changeStatus = false;
 				break;
 			default:
@@ -94,8 +93,6 @@ public class EnemyRoamer : MonoBehaviour {
 
 	void Trigger() {
 		if (playerManager.currentCharacter == enemyType) {
-//			Debug.Log("explode");
-
 			Explode (); 
 		}
 	}

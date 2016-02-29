@@ -136,7 +136,6 @@ public class PlayerManager : MonoBehaviour {
 	void Trigger() {
 		originalNumObjects = collidingObjects.Count;
 		for (int i = 0; i < collidingObjects.Count; i++) {
-			Debug.Log (" trigger" + collidingObjects.Count);
 			collidingObjects[i].SendMessage("Trigger");
 		}
 		RemoveDestroyedEnemies ();
@@ -151,7 +150,6 @@ public class PlayerManager : MonoBehaviour {
 	
 	void OnTriggerExit2D(Collider2D other) {
 		for (int i = 0; i < collidingObjects.Count; i++) {
-			Debug.Log (collidingObjects.Count);
 			if (collidingObjects[i].GetComponentInChildren<Collider2D>() == other) {
 				collidingObjects.Remove(collidingObjects[i]);
 			}
@@ -160,7 +158,9 @@ public class PlayerManager : MonoBehaviour {
 
 	public void RemoveDestroyedEnemies() {
 		for (int i = 0; i < originalNumObjects; i++) {
-			collidingObjects.Remove(collidingObjects[0]);
+			if (collidingObjects [0].GetComponent<EnemyRoamer> ().enemyType == currentCharacter) {
+				collidingObjects.Remove (collidingObjects [0]);
+			}
 
 		}
 	}
