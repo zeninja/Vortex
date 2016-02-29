@@ -113,7 +113,7 @@ public class EnemyRoamer : MonoBehaviour {
 		if (other.CompareTag("Character")){
 			// Destroys characters on collision
 			//Debug.Log("name: " +other.transform.gameObject.name);
-			other.transform.gameObject.GetComponentInParent<Character>().SendMessage ("Destroy");
+		//	other.transform.gameObject.GetComponentInParent<Character>().SendMessage ("Destroy");
 		
 		}
 	
