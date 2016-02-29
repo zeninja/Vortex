@@ -12,12 +12,28 @@ public class EnemyRoamer : MonoBehaviour {
 	state enemyState = state.none;
 	float xValue = 0;
 	float yValue = 0;
-	public float speed = 0.5f;
+	public float moveSpeed = 0.5f;
+	public float rotationSpeed = 0.5f;
+	bool enemyInRange= false;
+
+
+	EnemyRoamerCollider sightCollider; 
+	Collider2D characterToPursue;
+
+	Vector3 upAxis = new Vector3 (0f, 0f, -1f);
+
+	Transform myTransform;
 
 	void Start () {
-		xValue = Random.Range(-1f,1f);
-		yValue = Random.Range(-1f,1f);
+	//	xValue = Random.Range(-1f,1f);
+	//	yValue = Random.Range(-1f,1f);
+		Quaternion randomRotation = Quaternion.Euler( 0 , 0 , Random.Range(0, 360));
+		transform.rotation = randomRotation;
+
+
 		playerManager = GameObject.Find("Player").GetComponent<PlayerManager>();
+		sightCollider = transform.GetComponentInChildren<EnemyRoamerCollider> ();
+		myTransform = transform;
 
 	}
 
@@ -28,7 +44,13 @@ public class EnemyRoamer : MonoBehaviour {
 		if (changeStatus) {
 			switch (enemyState) {
 			case state.Pursue:
+				Vector3 targetHeading = characterToPursue.transform.position - myTransform.position;
+	
+				float angle = Mathf.Atan2(targetHeading.y, targetHeading.x) * Mathf.Rad2Deg;
+				myTransform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+
 				PursuePlayer ();
+
 				changeStatus = false;
 				break;
 			default:
@@ -43,10 +65,11 @@ public class EnemyRoamer : MonoBehaviour {
 	void CheckStatus(){
 		// Check what action to do next
 		if (CheckForPlayer ()) {
-			if (enemyState != state.Pursue) {
+//				Debug.Log ("insidecheckforplayer");
+				characterToPursue = sightCollider.charcterToPursue;
 				changeStatus = true; 
 				enemyState = state.Pursue;
-			}
+
 		} else {
 			if (enemyState != state.Wander) {
 				enemyState = state.Wander;
@@ -54,34 +77,40 @@ public class EnemyRoamer : MonoBehaviour {
 		}
 	}
 
+
+	bool CheckForPlayer(){
+		return sightCollider.characterInRange;
+		//	return false; // temp
+
+	}
+
 	void Wander(){
 //		Debug.Log ("wandeR" + xValue);
-//		this.transform.position = new Vector3 (transform.position.x+ Random.Range(-1f,1f), transform.position.y+ Random.Range(-1f,1f), transform.position.z); 
-		this.transform.position = new Vector3 (transform.position.x + xValue *speed, transform.position.y+ yValue *speed, transform.position.z); 
+	//	myTransform.position = new Vector3 (myTransform.position.x + xValue *moveSpeed, myTransform.position.y+ yValue *moveSpeed, myTransform.position.z); 
+		myTransform.position += myTransform.right * moveSpeed * Time.deltaTime;
 
-		//transform.position += moveDirection;
 
 	}
 
 	void Trigger() {
 		if (playerManager.currentCharacter == enemyType) {
+//			Debug.Log("explode");
+
 			Explode (); 
 		}
 	}
 
-	bool CheckForPlayer(){
-		return false; // temp
-		
-	}
 
 	void Explode(){
 		//Remove from collidingObjects in PlayerManager
-		playerManager.RemoveDestroyedEnemy(gameObject.GetComponent<Collider2D>());
+	//	playerManager.RemoveDestroyedEnemy(gameObject.GetComponent<Collider2D>());
 		Destroy (gameObject);
 	}
 
 	void PursuePlayer(){
-	
+		myTransform.position += myTransform.right * moveSpeed * Time.deltaTime;
+
+
 	}
 
 

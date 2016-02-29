@@ -20,7 +20,7 @@ public class PlayerManager : MonoBehaviour {
 	List<GameObject> collidingObjects = new List<GameObject>();
 	
 	public GameObject graphics;
-	
+	int originalNumObjects = 0;
 //	Vector2[] comparedSlopes;
 
 	// Use this for initialization
@@ -134,9 +134,12 @@ public class PlayerManager : MonoBehaviour {
 	}
 	
 	void Trigger() {
+		originalNumObjects = collidingObjects.Count;
 		for (int i = 0; i < collidingObjects.Count; i++) {
+			Debug.Log (" trigger" + collidingObjects.Count);
 			collidingObjects[i].SendMessage("Trigger");
 		}
+		RemoveDestroyedEnemies ();
 		graphics.SendMessage("Trigger");
 	}
 	
@@ -148,17 +151,17 @@ public class PlayerManager : MonoBehaviour {
 	
 	void OnTriggerExit2D(Collider2D other) {
 		for (int i = 0; i < collidingObjects.Count; i++) {
+			Debug.Log (collidingObjects.Count);
 			if (collidingObjects[i].GetComponentInChildren<Collider2D>() == other) {
 				collidingObjects.Remove(collidingObjects[i]);
 			}
 		}
 	}
 
-	public void RemoveDestroyedEnemy(Collider2D other) {
-		for (int i = 0; i < collidingObjects.Count; i++) {
-			if (collidingObjects[i].GetComponentInChildren<Collider2D>() == other) {
-				collidingObjects.Remove(collidingObjects[i]);
-			}
+	public void RemoveDestroyedEnemies() {
+		for (int i = 0; i < originalNumObjects; i++) {
+			collidingObjects.Remove(collidingObjects[0]);
+
 		}
 	}
 
