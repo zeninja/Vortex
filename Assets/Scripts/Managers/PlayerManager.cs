@@ -18,9 +18,14 @@ public class PlayerManager : MonoBehaviour {
 	float[] changingSlopes;
 	
 	List<GameObject> collidingObjects = new List<GameObject>();
+	List<GameObject> explodedEnemies = new List<GameObject>();
 	
 	public GameObject graphics;
 	int originalNumObjects = 0;
+
+	public GameManager gameManagerS;
+
+
 //	Vector2[] comparedSlopes;
 
 	// Use this for initialization
@@ -36,15 +41,18 @@ public class PlayerManager : MonoBehaviour {
 		prevSlopes 	   = new float[3];
 		
 		comparedSlopes = new float[3];
-		
+
 
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		UpdateCollider();
-		UpdateLineDisplay();
-		CalculateSlopesBetweenCharacters();
+//		Debug.Log (gameManagerS.gamePlaying);
+		if (gameManagerS.gamePlaying) {
+			UpdateCollider ();
+			UpdateLineDisplay ();
+			CalculateSlopesBetweenCharacters ();
+		}
 	}
 	
 	public void SetCharacterType(CharacterType latestCharacter) {
@@ -125,7 +133,11 @@ public class PlayerManager : MonoBehaviour {
 //		int colliderLayer = 1 << LayerMask.NameToLayer("Player");
 		
 		RaycastHit2D hit = Physics2D.Raycast(startPosition, Vector2.zero);
-		
+
+		if (gameManagerS.gamePlaying == false) {
+			Debug.Log ("tap");
+			Application.LoadLevel (0);
+		}
 		if (hit.collider != null) {
 			if(hit.collider == polygonCollider) {
 				Trigger();
@@ -136,7 +148,10 @@ public class PlayerManager : MonoBehaviour {
 	void Trigger() {
 		originalNumObjects = collidingObjects.Count;
 		for (int i = 0; i < originalNumObjects; i++) {
-			collidingObjects[i].SendMessage("Trigger");
+			//collidingObjects[i].SendMessage("Trigger");
+			if (collidingObjects [i].GetComponent<EnemyRoamer> ().enemyType == currentCharacter) {
+				explodedEnemies.Add (collidingObjects [i]);
+			}
 		}
 		RemoveDestroyedEnemies ();
 		graphics.SendMessage("Trigger");
@@ -149,7 +164,7 @@ public class PlayerManager : MonoBehaviour {
 	}
 	
 	void OnTriggerExit2D(Collider2D other) {
-		Debug.Log ("ontriggerexit : " + collidingObjects.Count);
+//		Debug.Log ("ontriggerexit : " + collidingObjects.Count);
 		for (int i = 0; i < collidingObjects.Count; i++) {
 			if (collidingObjects[i].GetComponentInChildren<Collider2D>() == other) {
 				collidingObjects.Remove(collidingObjects[i]);
@@ -160,13 +175,19 @@ public class PlayerManager : MonoBehaviour {
 
 	public void RemoveDestroyedEnemies() {
 
-	
-		for (int i = 0; i < originalNumObjects; i++) {
-			if (collidingObjects [0].GetComponent<EnemyRoamer> ().enemyType == currentCharacter) {
-				collidingObjects [0].GetComponent<EnemyRoamer> ().Explode ();
-				collidingObjects.Remove (collidingObjects [0]);
+		gameManagerS.totalPoints += explodedEnemies.Count;
+		Debug.Log("score: " + gameManagerS.totalPoints);
+		for (int i = 0; i < explodedEnemies.Count; i++) {
+			for (int f = 0; f < collidingObjects.Count; f++) {
+				if (collidingObjects [f] == explodedEnemies [i]) {
+					collidingObjects [f].GetComponent<EnemyRoamer> ().Explode ();
+					collidingObjects.Remove (collidingObjects [f]);
+				}
 			}
 
+		}
+		for (int i = 0; i < explodedEnemies.Count; i++) {
+					explodedEnemies.Remove (explodedEnemies [0]);
 		}
 	}
 

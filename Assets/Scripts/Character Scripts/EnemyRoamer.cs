@@ -16,6 +16,7 @@ public class EnemyRoamer : MonoBehaviour {
 	public float rotationSpeed = 0.5f;
 	bool enemyInRange= false;
 
+	GameManager gameManager;
 
 	EnemyRoamerCollider sightCollider; 
 	Collider2D characterToPursue;
@@ -25,12 +26,10 @@ public class EnemyRoamer : MonoBehaviour {
 	Transform myTransform;
 
 	void Start () {
-	//	xValue = Random.Range(-1f,1f);
-	//	yValue = Random.Range(-1f,1f);
-		Quaternion randomRotation = Quaternion.Euler( 0 , 0 , Random.Range(0, 360));
-		transform.rotation = randomRotation;
-
-
+	//	Quaternion randomRotation = Quaternion.Euler( 0 , 0 , Random.Range(0, 360));
+	//	transform.rotation = randomRotation;
+		gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+//		Debug.Log (" rotaiton in roamer " + transform.rotation);
 		playerManager = GameObject.Find("Player").GetComponent<PlayerManager>();
 		sightCollider = transform.GetComponentInChildren<EnemyRoamerCollider> ();
 		myTransform = transform;
@@ -92,9 +91,11 @@ public class EnemyRoamer : MonoBehaviour {
 	}
 
 	void Trigger() {
-		if (playerManager.currentCharacter == enemyType) {
+	/*	if (playerManager.currentCharacter == enemyType) {
+			gameManager.totalPoints += 1;
+			Debug.Log ("points: " + gameManager.totalPoints);
 			//Explode (); 
-		}
+		}*/
 	}
 
 
@@ -106,14 +107,18 @@ public class EnemyRoamer : MonoBehaviour {
 
 	void PursuePlayer(){
 		myTransform.position += myTransform.right * moveSpeed * Time.deltaTime;
-
+		  
 	}
 
 	void OnTriggerEnter2D(Collider2D other){
-		if (other.CompareTag("Character")){
+		if (other.CompareTag("Character") ){
+			Debug.Log("kill character");
+			gameManager.gamePlaying = false;
+			gameManager.GameOver ();
 			// Destroys characters on collision
 			//Debug.Log("name: " +other.transform.gameObject.name);
 		//	other.transform.gameObject.GetComponentInParent<Character>().SendMessage ("Destroy");
+
 		
 		}
 	
