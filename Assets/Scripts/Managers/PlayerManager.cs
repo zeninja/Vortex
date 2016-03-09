@@ -23,6 +23,9 @@ public class PlayerManager : MonoBehaviour {
 	public GameObject graphics;
 	int originalNumObjects = 0;
 
+	//	[System.NonSerialized]
+	public Vector2[] offsets = new Vector2[3];
+
 	public GameManager gameManagerS;
 
 
@@ -138,9 +141,31 @@ public class PlayerManager : MonoBehaviour {
 			Debug.Log ("tap");
 			Application.LoadLevel (0);
 		}
+
 		if (hit.collider != null) {
 			if(hit.collider == polygonCollider) {
 				Trigger();
+			}
+		}
+	}
+
+	void OnFingerDown(FingerDownEvent e) {
+		for(int i = 0; i < characters.Length; i++) {
+			if(e.Selection == characters[i]) {
+				characters[i].GetComponent<Character>().fingerIndex = e.Finger.Index;
+				offsets[e.Finger.Index] = (Vector2)characters[i].transform.position - (Vector2)Camera.main.ScreenToWorldPoint(e.Finger.Position);
+				SetCharacterType(characters[i].GetComponent<Character>().myCharacter);
+			}
+		}
+	}
+	
+	void OnFingerUp(FingerUpEvent e) {
+		for (int i = 0; i < characters.Length; i++) {
+			if (characters[i].GetComponent<Character>().fingerIndex == e.Finger.Index) {
+				SetCharacterType(characters[i].GetComponent<Character>().myCharacter);
+				Trigger();
+				
+				characters[i].GetComponent<Character>().fingerIndex = -1;
 			}
 		}
 	}
@@ -176,7 +201,6 @@ public class PlayerManager : MonoBehaviour {
 	}
 
 	public void RemoveDestroyedEnemies() {
-
 		gameManagerS.totalPoints += explodedEnemies.Count;
 //		Debug.Log("score: " + gameManagerS.totalPoints);
 	/*	for (int i = 0; i < explodedEnemies.Count; i++) {
