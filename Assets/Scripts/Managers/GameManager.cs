@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour {
 			GUI.Label (textArea, "Points: " + totalPoints);
 		} else {
 			GUI.Label (new Rect((Screen.width/2)-17,(Screen.height/2)-5 ,Screen.width, Screen.height+20), "Points: " + totalPoints);
-
+			GUI.Label (new Rect((Screen.width/2)-26,(Screen.height/2)+13 ,Screen.width, Screen.height+20), "High Score: " + PlayerPrefs.GetInt("highscore",0));
 		}
 	
 	}
@@ -134,6 +134,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void GameOver(){
+		StoreHighscore (totalPoints);
 		gamePlaying = false;
 		Restart ();
 		//
@@ -145,10 +146,12 @@ public class GameManager : MonoBehaviour {
 		//OnGui ();
 	}
 
-	/*void OnGui(){
-		if (GUI.Button(new Rect(10,10,150,100), "Restart")) {
-			Application.LoadLevel (0);
+	void StoreHighscore(int newHighscore)
+	{
+		int oldHighscore = PlayerPrefs.GetInt("highscore", 0);    
+		if (newHighscore > oldHighscore) {
+			PlayerPrefs.SetInt ("highscore", newHighscore);
+			PlayerPrefs.Save ();
 		}
-	
-	}*/
+	}
 }

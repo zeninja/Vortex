@@ -147,10 +147,12 @@ public class PlayerManager : MonoBehaviour {
 	
 	void Trigger() {
 		originalNumObjects = collidingObjects.Count;
-		for (int i = 0; i < originalNumObjects; i++) {
+		for (int i = originalNumObjects-1; i >= 0; i--) { //for (int i = 0; i < originalNumObjects; i++) { //added
 			//collidingObjects[i].SendMessage("Trigger");
 			if (collidingObjects [i].GetComponent<EnemyRoamer> ().enemyType == currentCharacter) {
+				Debug.Log ("trigger " + originalNumObjects);
 				explodedEnemies.Add (collidingObjects [i]);
+				RemoveFromCollObjs (collidingObjects [i]); //added
 			}
 		}
 		RemoveDestroyedEnemies ();
@@ -164,7 +166,7 @@ public class PlayerManager : MonoBehaviour {
 	}
 	
 	void OnTriggerExit2D(Collider2D other) {
-//		Debug.Log ("ontriggerexit : " + collidingObjects.Count);
+		Debug.Log ("ontriggerexit : " + collidingObjects.Count);
 		for (int i = 0; i < collidingObjects.Count; i++) {
 			if (collidingObjects[i].GetComponentInChildren<Collider2D>() == other) {
 				collidingObjects.Remove(collidingObjects[i]);
@@ -176,8 +178,8 @@ public class PlayerManager : MonoBehaviour {
 	public void RemoveDestroyedEnemies() {
 
 		gameManagerS.totalPoints += explodedEnemies.Count;
-		Debug.Log("score: " + gameManagerS.totalPoints);
-		for (int i = 0; i < explodedEnemies.Count; i++) {
+//		Debug.Log("score: " + gameManagerS.totalPoints);
+	/*	for (int i = 0; i < explodedEnemies.Count; i++) {
 			for (int f = 0; f < collidingObjects.Count; f++) {
 				if (collidingObjects [f] == explodedEnemies [i]) {
 					collidingObjects [f].GetComponent<EnemyRoamer> ().Explode ();
@@ -185,12 +187,26 @@ public class PlayerManager : MonoBehaviour {
 				}
 			}
 
-		}
-		for (int i = 0; i < explodedEnemies.Count; i++) {
+		}*/
+		int originalnum = explodedEnemies.Count;
+		Debug.Log (" exploded: " + explodedEnemies.Count);
+		for (int i = 0; i < originalnum; i++) {
+		//	explodedEnemies [0].GetComponent<EnemyRoamer> ().Explode();
 					explodedEnemies.Remove (explodedEnemies [0]);
 		}
 	}
 
+	void RemoveFromCollObjs(GameObject other) { //added
+		for (int i = collidingObjects.Count-1; i >=0; i--) {
+
+			if (collidingObjects[i] == other) {
+				Debug.Log ("removeFromCollObjs : " + collidingObjects.Count);
+				collidingObjects[i].GetComponent<EnemyRoamer> ().Explode();
+				collidingObjects.Remove(collidingObjects[i]);
+				//break;
+			}
+		}
+	}
 
 	void OnDrawGizmos() {
 		Gizmos.DrawLine(characters[0].transform.position, characters[1].transform.position);
