@@ -43,12 +43,14 @@ public class GameManager : MonoBehaviour {
 //		Debug.Log (randomColor);
 		if (randomColor == 0) {
 			enemy.GetComponent<EnemyRoamer> ().enemyType = PlayerManager.CharacterType.Red;
+
 			enemy. GetComponentInChildren<SpriteRenderer> ().color = Color.red;
 		} else if (randomColor == 1) {
 			enemy.GetComponent<EnemyRoamer> ().enemyType = PlayerManager.CharacterType.Blue;
 			enemy.GetComponentInChildren<SpriteRenderer> ().color = Color.blue;
 		} else {
 			enemy.GetComponent<EnemyRoamer> ().enemyType = PlayerManager.CharacterType.Yellow;
+
 			enemy.GetComponentInChildren<SpriteRenderer> ().color = Color.yellow;
 
 
