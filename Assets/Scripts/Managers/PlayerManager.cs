@@ -151,7 +151,7 @@ public class PlayerManager : MonoBehaviour {
 	void OnFingerDown(FingerDownEvent e) {
 		for(int i = 0; i < characters.Length; i++) {
 			if(e.Selection == characters[i]) {
-				Debug.Log ("tap");
+//				Debug.Log ("tap");
 				characters[i].GetComponent<Character>().fingerIndex = e.Finger.Index;
 				offsets[e.Finger.Index] = (Vector2)characters[i].transform.position - (Vector2)Camera.main.ScreenToWorldPoint(e.Finger.Position);
 				SetCharacterType(characters[i].GetComponent<Character>().myCharacter);
@@ -175,7 +175,7 @@ public class PlayerManager : MonoBehaviour {
 		for (int i = originalNumObjects-1; i >= 0; i--) { //for (int i = 0; i < originalNumObjects; i++) { //added
 			//collidingObjects[i].SendMessage("Trigger");
 			if (collidingObjects [i].GetComponent<EnemyRoamer> ().enemyType == currentCharacter) {
-				Debug.Log ("trigger " + originalNumObjects);
+//				Debug.Log ("trigger " + originalNumObjects);
 				explodedEnemies.Add (collidingObjects [i]);
 				RemoveFromCollObjs (collidingObjects [i]); //added
 			}
@@ -191,7 +191,7 @@ public class PlayerManager : MonoBehaviour {
 	}
 	
 	void OnTriggerExit2D(Collider2D other) {
-		Debug.Log ("ontriggerexit : " + collidingObjects.Count);
+//		Debug.Log ("ontriggerexit : " + collidingObjects.Count);
 		for (int i = 0; i < collidingObjects.Count; i++) {
 			if (collidingObjects[i].GetComponentInChildren<Collider2D>() == other) {
 				collidingObjects.Remove(collidingObjects[i]);
@@ -213,7 +213,7 @@ public class PlayerManager : MonoBehaviour {
 
 		}*/
 		int originalnum = explodedEnemies.Count;
-		Debug.Log (" exploded: " + explodedEnemies.Count);
+//		Debug.Log (" exploded: " + explodedEnemies.Count);
 		for (int i = 0; i < originalnum; i++) {
 		//	explodedEnemies [0].GetComponent<EnemyRoamer> ().Explode();
 					explodedEnemies.Remove (explodedEnemies [0]);
@@ -224,7 +224,7 @@ public class PlayerManager : MonoBehaviour {
 		for (int i = collidingObjects.Count-1; i >=0; i--) {
 
 			if (collidingObjects[i] == other) {
-				Debug.Log ("removeFromCollObjs : " + collidingObjects.Count);
+//				Debug.Log ("removeFromCollObjs : " + collidingObjects.Count);
 				collidingObjects[i].GetComponent<EnemyRoamer> ().Explode();
 				collidingObjects.Remove(collidingObjects[i]);
 				//break;

@@ -4,12 +4,19 @@ using System.Collections;
 public class GameManager : MonoBehaviour {
 
 	public GameObject enemy;
+	public GameObject enemyStraight;
+	public GameObject enemyPursue;
 	float seconds = 0;
 	float maxSeconds = 10;
 	float totalSeconds = 13;
 	float incrementalSec = 10;
 	public int totalEnemies = 0;
 	public bool gamePlaying = true;
+	int intervalToSpawnStraight = 8;
+	float elapsedTime = 0;
+	float startTime = 0;
+
+	bool firstCall = true; // generate pursing 
 
 	public GameObject restartObject;
 //	public PlayerManager playerManager;
@@ -17,7 +24,7 @@ public class GameManager : MonoBehaviour {
 
 	public int totalPoints = 0;
 	void Start () {
-
+		startTime = Time.time;
 		StartCoroutine (GenerateEnemy ());
 		//InvokeRepeating("EnemySpawner",0,2);
 	}
@@ -112,22 +119,70 @@ public class GameManager : MonoBehaviour {
 	}
 
 	IEnumerator GenerateEnemy(){
-
-		while (gamePlaying) {
-			seconds = Random.Range (1, maxSeconds);
-			EnemySpawner ();
-			//if (totalSeconds 
-			totalEnemies +=1;
-			if ((Time.time > (totalSeconds +incrementalSec)) && (totalEnemies > 10-maxSeconds)&&
-				maxSeconds >=1){ //have it so it spawns more at shorter intervals
-				//	Debug.Log (" total : " + totalSeconds + " incrememtSec : " + incrementalSec+ " maxsex:  "+maxSeconds);
+		if (firstCall == true) {
+			enemy = enemyStraight;
+//			Debug.Log (" in first "+ enemy.name);
+			while (gamePlaying && firstCall ==true) {
+//				Debug.Log (" in second");
+				seconds = Random.Range (1, maxSeconds);
+				EnemySpawner ();
+				//if (totalSeconds 
+				totalEnemies += 1;
+				if ((Time.time > (totalSeconds + incrementalSec)) && (totalEnemies > 10 - maxSeconds) &&
+					maxSeconds >= 1) { //have it so it spawns more at shorter intervals
+					//	Debug.Log (" total : " + totalSeconds + " incrememtSec : " + incrementalSec+ " maxsex:  "+maxSeconds);
 					incrementalSec -= 1; 
 					maxSeconds -= 1;
 					totalSeconds = Time.time;
 					totalEnemies = 0;
+				}
+				yield return new WaitForSeconds (seconds);
+				//totalSeconds += seconds; 
+				if((Time.time -startTime)>10){
+					Debug.Log (" 20 seconds have passed");
+					firstCall = false;
+					 seconds = 0;
+					 maxSeconds = 10;
+					 totalSeconds = 13;
+					 incrementalSec = 10;
+					 totalEnemies = 0;
+					StartCoroutine (GenerateEnemy ());
+				}
+
 			}
-			//totalSeconds += seconds; 
-			yield return new WaitForSeconds (seconds);
+
+			   
+		} else {
+			enemy = enemyPursue;
+			elapsedTime = Time.time;
+			while (gamePlaying) {
+				seconds = Random.Range (1, maxSeconds);
+				Debug.Log ("range " + seconds);
+				EnemySpawner ();
+				if (seconds > intervalToSpawnStraight) { //to spawn some straights for variety
+					Debug.Log("enemystriangts");
+					enemy = enemyStraight;
+					EnemySpawner ();
+					enemy = enemyPursue;
+					}
+				//if (totalSeconds 
+				totalEnemies += 1;
+				if ((Time.time > (totalSeconds + incrementalSec)) && (totalEnemies > 10 - maxSeconds) &&
+				   maxSeconds >= 1) { //have it so it spawns more at shorter intervals
+					//	Debug.Log (" total : " + totalSeconds + " incrememtSec : " + incrementalSec+ " maxsex:  "+maxSeconds);
+					incrementalSec -= 1; 
+					maxSeconds -= 1;
+					totalSeconds = Time.time;
+					totalEnemies = 0;
+				}
+				//totalSeconds += seconds; 
+				if (Time.time - elapsedTime > 10) {
+					Debug.Log("elapstedtime");
+					elapsedTime = Time.time;
+					intervalToSpawnStraight -= 1;
+				}
+				yield return new WaitForSeconds (seconds);
+			}
 		}
 	}
 

@@ -5,6 +5,9 @@ public class EnemyRoamer : MonoBehaviour {
 	// This Enemy roams around, pursues player in a radius, and has a melee weapon.
 
 	public PlayerManager.CharacterType enemyType = PlayerManager.CharacterType.Red;
+	public enum EnemyStatus { Pursue, Straight};
+	public EnemyStatus enemyStatus = EnemyStatus.Straight;
+
 	PlayerManager playerManager;
 	bool changeStatus = false; 
 //	string state = "none";
@@ -31,15 +34,17 @@ public class EnemyRoamer : MonoBehaviour {
 		gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 //		Debug.Log (" rotaiton in roamer " + transform.rotation);
 		playerManager = GameObject.Find("Player").GetComponent<PlayerManager>();
-		sightCollider = transform.GetComponentInChildren<EnemyRoamerCollider> ();
+		if (enemyStatus == EnemyStatus.Pursue) {
+			sightCollider = transform.GetComponentInChildren<EnemyRoamerCollider> ();
+		}
 		myTransform = transform;
 
 	}
 
 	void Update () {
-
-		CheckStatus ();
-
+		if (enemyStatus == EnemyStatus.Pursue) {
+			CheckStatus ();
+		}
 		if (changeStatus) {
 			switch (enemyState) {
 			case state.Pursue:
