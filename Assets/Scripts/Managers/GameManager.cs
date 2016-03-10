@@ -67,7 +67,7 @@ public class GameManager : MonoBehaviour {
 //		Debug.Log (pickSide+ " "+ pickSide2);
 		if (pickSide == 1) {
 			if (pickSide2 == 1) {
-				y = -25;   // suppose to be 25 but shifted a little forward so it doesnt just "appear" 
+				y = -27;   // suppose to be 25 but shifted a little forward so it doesnt just "appear" 
 				x = Random.Range (-33, 33);
 				if (x < 0) {  // bottom left
 					rotation = Random.Range (0, 90);

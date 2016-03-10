@@ -22,9 +22,25 @@ public class Character : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
+	Vector2 pos;
 	void Update () {
 		if(fingerIndex >= 0) {
+			
 			transform.position = (Vector2)Camera.main.ScreenToWorldPoint(FingerGestures.GetFinger(fingerIndex).Position) + playerManager.offsets[fingerIndex];
+			pos = new Vector2 (transform.position.x, transform.position.y);
+			if (transform.position.x <= -33){
+				pos.x = -32;
+			}
+			if (transform.position.x >= 33) {
+				pos.x = 32; 
+			}
+			if (transform.position.y <= -25) {
+				pos.y = -24;
+			}
+			if(transform.position.y >= 25) {
+				pos.y= 24;
+			}
+			transform.position = pos;
 		}
 	}
 }
