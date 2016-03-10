@@ -138,7 +138,6 @@ public class PlayerManager : MonoBehaviour {
 		RaycastHit2D hit = Physics2D.Raycast(startPosition, Vector2.zero);
 
 		if (gameManagerS.gamePlaying == false) {
-			Debug.Log ("tap");
 			Application.LoadLevel (0);
 		}
 
@@ -152,6 +151,7 @@ public class PlayerManager : MonoBehaviour {
 	void OnFingerDown(FingerDownEvent e) {
 		for(int i = 0; i < characters.Length; i++) {
 			if(e.Selection == characters[i]) {
+				Debug.Log ("tap");
 				characters[i].GetComponent<Character>().fingerIndex = e.Finger.Index;
 				offsets[e.Finger.Index] = (Vector2)characters[i].transform.position - (Vector2)Camera.main.ScreenToWorldPoint(e.Finger.Position);
 				SetCharacterType(characters[i].GetComponent<Character>().myCharacter);
