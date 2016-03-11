@@ -16,15 +16,23 @@ public class GameManager : MonoBehaviour {
 	float elapsedTime = 0;
 	float startTime = 0;
 
+	Vector3 screenPosition; 
+	Vector2 pos;
 	bool firstCall = true; // generate pursing 
 
 	public GameObject restartObject;
 //	public PlayerManager playerManager;
 	// Use this for initialization
 
+	private GUIStyle guiStyle = new GUIStyle(); 
+	private GUIStyle guiStyleTitle = new GUIStyle(); 
+
 	public int totalPoints = 0;
 	void Start () {
 		startTime = Time.time;
+		screenPosition = new Vector3 (Screen.width/2, Screen.height/2,0);
+		screenPosition = Camera.main.ScreenToWorldPoint (pos);
+		Debug.Log ("screenpos " + screenPosition);
 		StartCoroutine (GenerateEnemy ());
 		//InvokeRepeating("EnemySpawner",0,2);
 	}
@@ -36,11 +44,16 @@ public class GameManager : MonoBehaviour {
 	Rect textArea = new Rect(0,0,Screen.width, Screen.height);
 
 	void OnGUI() {
+		guiStyle.fontSize =  (int) (Screen.width * 0.04f); //change the font size
+		guiStyleTitle.fontSize =  (int) (Screen.width * 0.09f); 
 		if (gamePlaying == true) {
 			GUI.Label (textArea, "Points: " + totalPoints);
 		} else {
-			GUI.Label (new Rect((Screen.width/2)-17,(Screen.height/2)-5 ,Screen.width, Screen.height+20), "Points: " + totalPoints);
-			GUI.Label (new Rect((Screen.width/2)-26,(Screen.height/2)+13 ,Screen.width, Screen.height+20), "High Score: " + PlayerPrefs.GetInt("highscore",0));
+			
+			GUI.Label (new Rect((Screen.width/2)-35,(Screen.height/2)-50 ,Screen.width, Screen.height+20), "Restart",guiStyleTitle);
+			GUI.Label (new Rect((Screen.width/2)-30,(Screen.height/2)-5 ,Screen.width, Screen.height+20), "Points: " + totalPoints,guiStyle);
+
+			GUI.Label (new Rect((Screen.width/2)-30,(Screen.height/2)+13 ,Screen.width, Screen.height+20), "High Score: " + PlayerPrefs.GetInt("highscore",0),guiStyle);
 		}
 	
 	}
@@ -58,8 +71,8 @@ public class GameManager : MonoBehaviour {
 			enemy.GetComponent<EnemyRoamer> ().enemyType = PlayerManager.CharacterType.Yellow;
 			enemy.GetComponentInChildren<SpriteRenderer>().color = Color.yellow;
 		}
-		int x = 0;
-		int y = 0;
+		float x = 0;
+		float y = 0;
 		int pickSide = Random.Range (1, 3); 
 		int pickSide2 = Random.Range (1, 3); 
 		int rotation = 0;
@@ -67,8 +80,8 @@ public class GameManager : MonoBehaviour {
 //		Debug.Log (pickSide+ " "+ pickSide2);
 		if (pickSide == 1) {
 			if (pickSide2 == 1) {
-				y = -27;   // suppose to be 25 but shifted a little forward so it doesnt just "appear" 
-				x = Random.Range (-33, 33);
+				y = screenPosition.y-2;   // suppose to be- 25 but shifted a little forward so it doesnt just "appear" 
+				x = Random.Range (screenPosition.x, 0-screenPosition.x); //-33, 33
 				if (x < 0) {  // bottom left
 					rotation = Random.Range (0, 90);
 				}
@@ -76,8 +89,8 @@ public class GameManager : MonoBehaviour {
 					rotation = Random.Range (90,180); 
 				}
 			} else { 
-				y = 27;
-				x = Random.Range (-33, 33);
+				y = 0-screenPosition.y+2;
+				x = Random.Range (screenPosition.x, 0-screenPosition.x);
 				if (x < 0) {  // top left
 					rotation = Random.Range (0, -90);
 				}
@@ -88,8 +101,8 @@ public class GameManager : MonoBehaviour {
 
 		} else {
 			if (pickSide2 == 1) {
-				x = -35; // suppose to be -33
-				y = Random.Range (-25, 25);
+				x = screenPosition.x-2; // suppose to be -33
+				y = Random.Range (screenPosition.y, 0-screenPosition.y);
 				if (y < 0) {  // left bottom
 					rotation = Random.Range (0, 90);
 				}
@@ -97,8 +110,8 @@ public class GameManager : MonoBehaviour {
 					rotation = Random.Range (0,-90);
 				}
 			} else {
-				x = 35;
-				y = Random.Range (-25, 25);
+				x = 0-screenPosition.x+2;
+				y = Random.Range (screenPosition.y, 0 - screenPosition.y);
 				if (y < 0) {  // right bottom
 					rotation = Random.Range (90, 180);
 				}
@@ -138,7 +151,7 @@ public class GameManager : MonoBehaviour {
 				}
 				yield return new WaitForSeconds (seconds);
 				//totalSeconds += seconds; 
-				if((Time.time -startTime)>10){
+				if((Time.time -startTime)>20){
 					Debug.Log (" 20 seconds have passed");
 					firstCall = false;
 					 seconds = 0;

@@ -35,7 +35,8 @@ public class ScreenRaycaster : MonoBehaviour
     /// <summary>
     /// Layers to ignore when raycasting
     /// </summary>
-    public LayerMask IgnoreLayerMask;
+   // public LayerMask IgnoreLayerMask;
+	public LayerMask IgnoreLayerMask;
 
     /// <summary>
     /// Thickness of the ray. 
@@ -59,6 +60,7 @@ public class ScreenRaycaster : MonoBehaviour
     void Start()
     {
         // if no cameras were explicitely provided, use the current main camera
+		IgnoreLayerMask= (1 << LayerMask.NameToLayer ("Enemy") | 1 << LayerMask.NameToLayer ("Collision")); // ignore both layerX and layerY
         if( Cameras == null || Cameras.Length == 0 )
             Cameras = new Camera[] { Camera.main };
     }
